@@ -12,7 +12,6 @@
 # include "camera.h"
 # include "material.h"
 
-
 t_color			random_color(double min, double max)
 {
 	return (color(random_double_(min,max),random_double_(min,max),random_double_(min,max)));
@@ -26,7 +25,7 @@ t_hittable_list *random_scene(void)
 	world = NULL;
 	t_material *ground_material = make_material(LAMBERTIAN, color(0.5,0.5,0.5), 0);
 
-    h_lstadd_back(&world, h_lstnew(SP, new_sphere(point(0,-1000,0), 1000, ground_material)));
+    h_lstadd_back(&world, h_lstnew(SP, sphere(point(0,-1000,0), 1000, ground_material)));
 
     for (int a = -11; a < 11; a++) {
         for (int b = -11; b < 11; b++) {
@@ -41,30 +40,31 @@ t_hittable_list *random_scene(void)
                     // diffuse
                     t_color albedo = vmult_(random_color(0,1), random_color(0,1));
                     sphere_material = make_material(LAMBERTIAN, albedo, 0);
-                    h_lstadd_back(&world, h_lstnew(SP, new_sphere(center, 0.2, sphere_material)));
+                    t_point3 center2 = vplus(center, vec3(0, random_double_(0, 0.5), 0));
+					h_lstadd_back(&world, h_lstnew(MOV_SP, moving_sphere(center, center2, 0.0, 1.0, 0.2, sphere_material)));
                 } else if (choose_mat < 0.95) {
                     // metal
                     t_color albedo = random_color(0.5, 1);
                     double fuzz = random_double_(0, 0.5);
                     sphere_material = make_material(METAL, albedo, fuzz);
-                    h_lstadd_back(&world, h_lstnew(SP, new_sphere(center, 0.2, sphere_material)));
+                    h_lstadd_back(&world, h_lstnew(SP, sphere(center, 0.2, sphere_material)));
                 } else {
                     // glass
                     sphere_material = make_material(DIELECTRIC, color(0,0,0), 1.5);
-                    h_lstadd_back(&world, h_lstnew(SP, new_sphere(center, 0.2, sphere_material)));
+                    h_lstadd_back(&world, h_lstnew(SP, sphere(center, 0.2, sphere_material)));
                 }
             }
         }
     }
 
     t_material *material1 = make_material(DIELECTRIC, color(0,0,0), 1.5);
-    h_lstadd_back(&world, h_lstnew(SP, new_sphere(point(0, 1, 0), 1.0, material1)));
+    h_lstadd_back(&world, h_lstnew(SP, sphere(point(0, 1, 0), 1.0, material1)));
 
     t_material *material2 = make_material(LAMBERTIAN, color(0.4, 0.2, 0.1), 0);
-    h_lstadd_back(&world, h_lstnew(SP, new_sphere(point(-4, 1, 0), 1.0, material2)));
+    h_lstadd_back(&world, h_lstnew(SP, sphere(point(-4, 1, 0), 1.0, material2)));
 
     t_material *material3 = make_material(METAL, color(0.7,0.6,0.5), 0.0);
-    h_lstadd_back(&world, h_lstnew(SP, new_sphere(point(4, 1, 0), 1.0, material3)));
+    h_lstadd_back(&world, h_lstnew(SP, sphere(point(4, 1, 0), 1.0, material3)));
     return (world);
 }
 
@@ -72,10 +72,10 @@ t_hittable_list *random_scene(void)
 int	main(void)
 {
 	//Image
-	const double	aspect_ratio = 3.0 / 2.0;
-	const int		image_width = 1200;
+	const double	aspect_ratio = 16.0 / 9.0;
+	const int		image_width = 400;
 	const int		image_height = (int)(image_width / aspect_ratio);
-	const int		samples_per_pixel = 200;
+	const int		samples_per_pixel = 100;
 	const int		max_depth = 50;
 
 	//World
@@ -89,7 +89,7 @@ int	main(void)
 	t_vec3		vup = vec3(0,1,0);
 	double		dist_to_focus = 10.0;
 	double		aperture = 0.1; // 조리개 크기
-	camera(&cam, lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus);
+	camera(&cam, lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus, 0.0, 1.0);
 
 	int				i;
 	int				j;

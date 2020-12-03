@@ -15,9 +15,11 @@ typedef struct	s_camera
 	t_vec3 			u;
 	t_vec3 			v;
 	double			lens_radius;
+	double			time0; // 셔터 오픈 / 클로즈 타임
+	double			time1;
 }				t_camera;
 
-void	camera(t_camera *c, t_point3 lookfrom, t_point3 lookat, t_vec3 vup, double vfov, double aspect_ratio, double aperture, double focus_dist);
+void	camera(t_camera *c, t_point3 lookfrom, t_point3 lookat, t_vec3 vup, double vfov, double aspect_ratio, double aperture, double focus_dist, double time0, double time1);
 t_ray	get_ray(double u, double v, t_camera *c);
 
 #endif

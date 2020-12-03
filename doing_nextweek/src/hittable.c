@@ -28,14 +28,15 @@ t_bool	hit(t_hittable_list *obj, t_ray *r, t_hit_record *rec)
 	is_hit = FALSE;
 	if (obj->object_type == SP)
 		is_hit = hit_sphere((t_sphere *)(obj->data), r, rec);
-	// if (obj->object_type == PL)
+	if (obj->object_type == MOV_SP)
+		is_hit = hit_moving_sphere((t_moving_sphere *)(obj->data), r, rec);
 	// if (obj->object_type == SQ)
 	// if (obj->object_type == CY)
 	// if (obj->object_type == TR)
 	return (is_hit);
 }
 
-t_bool hit_sphere(t_sphere *sphere, t_ray *r, t_hit_record *rec)
+static t_bool hit_sphere(t_sphere *sphere, t_ray *r, t_hit_record *rec)
 {
 	t_vec3	oc;
 	double	a;
@@ -65,6 +66,43 @@ t_bool hit_sphere(t_sphere *sphere, t_ray *r, t_hit_record *rec)
 	rec->t = root;
 	rec->p = at(r, rec->t);
 	rec->normal = vdevide(vminus(rec->p, sphere->center), sphere->radius);
+	set_face_normal(r, rec);
+	rec->mat_ptr = sphere->mat_ptr;
+	return (TRUE);
+}
+
+static t_bool hit_moving_sphere(t_moving_sphere *sphere, t_ray *r, t_hit_record *rec)
+{
+	t_vec3	oc;
+	t_point3 cent;
+	double	a;
+	double	b;
+	double	c;
+	double	discriminant;
+	double	half_b;
+	double	sqrtd;
+	double	root;
+
+	cent = center(sphere, r->time);
+	oc = vminus(r->orig, cent);
+	a = vlength2(r->dir);
+	half_b = vdot(oc, r->dir);
+
+	c = vlength2(oc) - sphere->radius2;
+	discriminant = half_b * half_b - a * c; // 판별식
+	if (discriminant < 0)
+		return FALSE;
+	sqrtd = sqrt(discriminant);
+	root = (-half_b - sqrtd) / a;
+	if (root < rec->tmin || root > rec->tmax)
+	{
+		root = (-half_b + sqrtd) / a;
+		if (root < rec->tmin || root > rec->tmax)
+			return FALSE;
+	}
+	rec->t = root;
+	rec->p = at(r, rec->t);
+	rec->normal = vdevide(vminus(rec->p, cent), sphere->radius);
 	set_face_normal(r, rec);
 	rec->mat_ptr = sphere->mat_ptr;
 	return (TRUE);

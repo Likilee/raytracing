@@ -14,6 +14,6 @@ typedef struct	s_sphere
 	t_material	*mat_ptr;
 }				t_sphere;
 
-t_sphere	*new_sphere(t_point3 center, double radius, t_material *mat_ptr);
+t_sphere	*sphere(t_point3 center, double radius, t_material *mat_ptr);
 
 #endif

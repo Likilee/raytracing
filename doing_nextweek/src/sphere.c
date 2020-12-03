@@ -1,6 +1,6 @@
 #include "sphere.h"
 
-t_sphere	*new_sphere(t_point3 center, double radius, t_material *mat_ptr)
+t_sphere	*sphere(t_point3 center, double radius, t_material *mat_ptr)
 {
 	t_sphere *sphere;
 

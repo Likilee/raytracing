@@ -20,7 +20,7 @@ t_bool	scatter_lambertian(t_ray *r_in, t_hit_record *rec, t_color *attenuation, 
 	scatter_dir = vplus(rec->normal, random_unit_vector());
 	if (near_zero(&scatter_dir))
 		scatter_dir = rec->normal;
-	*scattered = ray(rec->p, scatter_dir);
+	*scattered = ray(rec->p, scatter_dir, r_in->time);
 	*attenuation = rec->mat_ptr->albedo;
 	return (TRUE);
 }
@@ -31,7 +31,7 @@ t_bool	scatter_metal(t_ray *r_in, t_hit_record *rec, t_color *attenuation, t_ray
 
 	// option1 == fuzz
 	reflected = reflect(vunit(r_in->dir), rec->normal);
-	*scattered = ray(rec->p, vplus(reflected, vmult(random_in_unit_sphere(), rec->mat_ptr->option1)));
+	*scattered = ray(rec->p, vplus(reflected, vmult(random_in_unit_sphere(), rec->mat_ptr->option1)), r_in->time);
 	*attenuation = rec->mat_ptr->albedo;
 	return (vdot(scattered->dir, rec->normal) > 0);
 }
@@ -66,7 +66,7 @@ t_bool	scatter_dielectric(t_ray *r_in, t_hit_record *rec, t_color *attenuation, 
 		direction = reflect(unit_dir, rec->normal);
 	else
 		direction = refract(&unit_dir, &rec->normal, refraction_ratio);
-	*scattered = ray(rec->p, direction);
+	*scattered = ray(rec->p, direction, r_in -> time);
 	return (TRUE);
 }
 

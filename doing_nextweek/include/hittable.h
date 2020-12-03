@@ -5,6 +5,7 @@
 # include "vec3.h"
 # include "bool.h"
 # include "sphere.h"
+# include "moving_sphere.h"
 # include "material.h"
 
 /*
@@ -18,10 +19,11 @@
 */
 
 # define SP 0
-# define PL 1
-# define SQ 2
-# define CY 3
-# define TR 4
+# define MOV_SP 1
+// # define PL
+// # define SQ
+// # define CY
+// # define TR
 
 typedef int		t_object;
 
@@ -46,11 +48,13 @@ struct	s_hittable_list
 	void 		*next;
 };
 
-void	recdup(t_hit_record *dst, t_hit_record *src);
-t_bool	hit_list(t_hittable_list *obj, t_ray *r, t_hit_record *rec);
-t_bool	hit(t_hittable_list *obj, t_ray *r, t_hit_record *rec);
-void	set_face_normal(t_ray *r, t_hit_record *rec);
-t_bool	hit_sphere(t_sphere *sphere, t_ray *r, t_hit_record *rec);
-t_color	ray_color(t_ray *r, t_hittable_list *world, int depth);
+void			recdup(t_hit_record *dst, t_hit_record *src);
+t_bool			hit_list(t_hittable_list *obj, t_ray *r, t_hit_record *rec);
+t_bool			hit(t_hittable_list *obj, t_ray *r, t_hit_record *rec);
+void			set_face_normal(t_ray *r, t_hit_record *rec);
+static t_bool	hit_sphere(t_sphere *sphere, t_ray *r, t_hit_record *rec);
+static t_bool 	hit_moving_sphere(t_moving_sphere *sphere, t_ray *r, t_hit_record *rec);
+
+t_color			ray_color(t_ray *r, t_hittable_list *world, int depth);
 
 #endif

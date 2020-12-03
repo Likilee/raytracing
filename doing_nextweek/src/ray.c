@@ -8,11 +8,12 @@ t_point3 at(t_ray *ray, double t)
 	return (at);
 }
 
-t_ray	ray(t_point3 orig, t_vec3 dir)
+t_ray	ray(t_point3 orig, t_vec3 dir, double time)
 {
-	t_ray new;
+	t_ray ray;
 
-	new.orig = orig;
-	new.dir = dir;
-	return (new);
+	ray.orig = orig;
+	ray.dir = dir;
+	ray.time = time;
+	return (ray);
 }

@@ -1,6 +1,6 @@
 #include "camera.h"
 
-void	camera(t_camera *c, t_point3 lookfrom, t_point3 lookat, t_vec3 vup, double vfov, double aspect_ratio, double aperture, double focus_dist)
+void	camera(t_camera *c, t_point3 lookfrom, t_point3 lookat, t_vec3 vup, double vfov, double aspect_ratio, double aperture, double focus_dist, double time0, double time1)
 {
 	double theta;
 	double h;
@@ -22,6 +22,8 @@ void	camera(t_camera *c, t_point3 lookfrom, t_point3 lookat, t_vec3 vup, double 
 	c->vertical = vmult(vmult(c->v, viewport_height), focus_dist);
 	c->lower_left_corner = vminus(vminus(vminus(c->origin, vdevide(c->horizontal, 2)), vdevide(c->vertical, 2)), vmult(c->w, focus_dist));
 	c->lens_radius = aperture / 2;
+	c->time0 = time0;
+	c->time1 = time1;
 };
 
 t_vec3	random_in_unit_disk(void)
@@ -47,5 +49,6 @@ t_ray	get_ray(double s, double t, t_camera *c)
 	r.orig = vplus(c->origin, offset);
 	r.dir = vminus(vminus(vplus(vplus(c->lower_left_corner, vmult(c->horizontal, s)),
 										 vmult(c->vertical, t)), c->origin), offset);
+	r.time = random_double_(c->time0, c->time1);
 	return (r);
 }
