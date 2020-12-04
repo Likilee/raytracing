@@ -7,8 +7,6 @@
 # include "sphere.h"
 # include "moving_sphere.h"
 # include "material.h"
-# include "aabb.h"
-# include "bvh.h"
 
 /*
 ** 추상화! > 구말고 다른 객체들이 생겨도 함수자체를 수정하지 않아도 되게.
@@ -56,15 +54,7 @@ t_bool			hit(t_hittable_list *obj, t_ray *r, t_hit_record *rec);
 void			set_face_normal(t_ray *r, t_hit_record *rec);
 static t_bool	hit_sphere(t_sphere *sphere, t_ray *r, t_hit_record *rec);
 static t_bool 	hit_moving_sphere(t_moving_sphere *sphere, t_ray *r, t_hit_record *rec);
+
 t_color			ray_color(t_ray *r, t_hittable_list *world, int depth);
-t_bool			hit_aabb(t_aabb *aabb, t_ray *r, t_hit_record *rec);
-t_bool	bounding_box_h_list(t_hittable_list *obj, double time0, double time1, t_aabb *output_box);
-t_bool	bounding_box(t_hittable_list *obj, double time0, double time1, t_aabb *output_box);
-static t_bool	bounding_box_sphere(t_sphere *sp, double time0, double time1, t_aabb *output_box);
-static t_bool	bounding_box_moving_sphere(t_moving_sphere *sp, double time0, double time1, t_aabb *output_box);
-
-
-
-
 
 #endif

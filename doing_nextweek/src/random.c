@@ -9,8 +9,3 @@ double		random_double_(double min, double max)
 {
 	return (min + (max - min) * random_double());
 }
-
-int			random_int(int min, int max)
-{
-	return ((int)random_double_(min, max + 1));
-}

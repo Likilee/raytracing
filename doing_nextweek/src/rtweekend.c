@@ -8,5 +8,3 @@ double	clamp(double x, double min, double max)
 		return (max);
 	return (x);
 }
-
-int		

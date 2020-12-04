@@ -46,4 +46,15 @@ object_span이 개수 인듯
 3개 이상이면 재귀로 소트 실행..
 
 ! 들어온 오브젝트 포인터를  bvh, hittable list 인지 구분해서 동작하게 짜야함.
-bounding_box 의 첫번 째 인자 hittable list 말고 void *로 해서 분기를 줘야 할듯!. 
+bounding_box 의 첫번 째 인자 hittable list 말고 void *로 해서 분기를 줘야 할듯!.
+배열은 void* 의 배열을 만들어야겠다
+
+모든 객체를 일반 구조체 objects를 만들고
+hittable, hittable_list, bvh_node 등을 담을 수 있게 만들자
+
+hit_object 에서 분기
+	hit_h_list
+		hit_hittable
+	hit_bvh_node
+		hit_bvh_node
+		hit_h_list
